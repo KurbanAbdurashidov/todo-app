@@ -1,8 +1,31 @@
 import cn from 'classnames'
 import { formatDistanceToNow } from 'date-fns'
 import PropTypes from 'prop-types'
+import { useEffect, useState } from 'react'
 
 export default function Task({ todo, taskValue, tasks, setTasks, deleteTask }) {
+	const [timeLeft, setTimeLeft] = useState(todo.timeSpent)
+	const [isTimerRunning, setIsTimerRunning] = useState(todo.isTimerRunning)
+
+	useEffect(() => {
+		let timer
+		if (isTimerRunning) {
+			timer = setInterval(() => {
+				setTimeLeft(prevTime => {
+					if (prevTime <= 0) {
+						clearInterval(timer)
+						return 0
+					}
+					return prevTime - 1
+				})
+			}, 1000)
+		} else {
+			clearInterval(timer)
+		}
+
+		return () => clearInterval(timer)
+	}, [isTimerRunning])
+
 	const startEditing = id => {
 		setTasks(
 			[...tasks].map(task =>
@@ -27,6 +50,15 @@ export default function Task({ todo, taskValue, tasks, setTasks, deleteTask }) {
 		)
 	}
 
+	const handleStartTimer = () => setIsTimerRunning(true)
+	const handlePauseTimer = () => setIsTimerRunning(false)
+
+	const formatTime = time => {
+		const minutes = Math.floor(time / 60)
+		const seconds = time % 60
+		return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
+	}
+
 	return (
 		<li
 			className={cn({
@@ -43,7 +75,20 @@ export default function Task({ todo, taskValue, tasks, setTasks, deleteTask }) {
 					checked={todo.isCompleted}
 				/>
 				<label>
-					<span className='description'>{taskValue}</span>
+					<span className='title'>{taskValue}</span>
+					<span className='description'>
+						<button
+							className='icon icon-play'
+							onClick={handleStartTimer}
+							disabled={isTimerRunning}
+						></button>
+						<button
+							className='icon icon-pause'
+							onClick={handlePauseTimer}
+							disabled={!isTimerRunning}
+						></button>
+						{formatTime(timeLeft)}
+					</span>
 					<span className='created'>
 						{`created ${formatDistanceToNow(new Date(todo.createdAt), {
 							addSuffix: true

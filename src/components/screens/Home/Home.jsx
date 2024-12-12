@@ -1,13 +1,15 @@
 import { useState } from 'react'
+import Footer from '../../ui/Footer/Footer'
 import NewTaskForm from '../../ui/NewTaskForm/NewTaskForm'
 import TaskList from '../../ui/TaskList/TaskList'
-import Footer from '../Footer/Footer'
 import styles from './Home.module.scss'
 
 export default function Home() {
 	const [taskValue, setTaskValue] = useState('')
 	const [tasks, setTasks] = useState([])
 	const [filter, setFilter] = useState('all')
+	const [minutes, setMinutes] = useState('')
+	const [seconds, setSeconds] = useState('')
 
 	const getFilteredTasks = () => {
 		if (filter === 'active') return tasks.filter(task => !task.isCompleted)
@@ -26,6 +28,10 @@ export default function Home() {
 					setTaskValue={setTaskValue}
 					tasks={tasks}
 					setTasks={setTasks}
+					minutes={minutes}
+					seconds={seconds}
+					setMinutes={setMinutes}
+					setSeconds={setSeconds}
 				/>
 			</header>
 			<section className={styles.main}>
@@ -35,6 +41,10 @@ export default function Home() {
 					tasks={tasks}
 					setTasks={setTasks}
 					filteredTasks={filteredTasks}
+					minutes={minutes}
+					seconds={seconds}
+					setMinutes={setMinutes}
+					setSeconds={setSeconds}
 				/>
 			</section>
 			<Footer

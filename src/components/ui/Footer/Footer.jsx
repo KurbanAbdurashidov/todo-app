@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import TasksFilter from '../../ui/TasksFilter/TasksFilter'
+import TasksFilter from '../TasksFilter/TasksFilter'
 import styles from './Footer.module.scss'
 
 export default function Footer({ tasks, setTasks, filter, setFilter }) {

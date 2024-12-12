@@ -1,7 +1,15 @@
 import PropTypes from 'prop-types'
 import Task from '../Task/Task'
 
-export default function TaskList({ tasks, setTasks, filteredTasks }) {
+export default function TaskList({
+	tasks,
+	setTasks,
+	filteredTasks,
+	minutes,
+	seconds,
+	setMinutes,
+	setSeconds
+}) {
 	const deleteTask = id => {
 		setTasks([...tasks].filter(todo => todo.id !== id))
 	}
@@ -16,6 +24,10 @@ export default function TaskList({ tasks, setTasks, filteredTasks }) {
 					tasks={tasks}
 					setTasks={setTasks}
 					deleteTask={deleteTask}
+					minutes={minutes}
+					seconds={seconds}
+					setMinutes={setMinutes}
+					setSeconds={setSeconds}
 				/>
 			))}
 		</ul>
